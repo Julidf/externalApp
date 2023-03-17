@@ -66,22 +66,19 @@ const InputField = styled(TextField)`
   padding: 10px;
 `;
 
-export default function CreateProfile() {
-  const [creatingProfile, setCreatingProfile] = useState(false);
+export const CreateProfile = ({ open, onClose }) => {
   const [accountType, setAccountType] = useState("");
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    dateOfBirth: ""
+  });
 
-  const handleClickOpen = () => {
-    setCreatingProfile(true);
-  };
-
-  const handleClose = () => {
-    setCreatingProfile(false);
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
     //send the data
-    setCreatingProfile(false);
     setAccountType("")
+    onClose()
   };
 
   const handleAccountTypeChange = (event) => {
@@ -89,63 +86,55 @@ export default function CreateProfile() {
   };
 
   return (
-    <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Create New Profile
-      </Button>
-      <FormPopup open={creatingProfile} onClose={handleClose}>
-        <DialogTitle>Create New Profile</DialogTitle>
-        <DialogContent>
-        <AccountTypeSection>
-          <InputLabel id="account-type-label">Type of Account</InputLabel>
-          <Select
-            labelId="account-type-label"
-            id="account-type"
-            value={accountType}
-            onChange={handleAccountTypeChange}
-          >
-            <MenuItem value="head-of-school">Head of School</MenuItem>
-            <MenuItem value="assistant-head-of-school">Assistant Head of School</MenuItem>
-          </Select>
-        </AccountTypeSection>
-        <InputField
+    <FormPopup open={open} onClose={onClose}>
+      <DialogTitle>Create New Profile</DialogTitle>
+      <DialogContent>
+      <AccountTypeSection>
+        <InputLabel id="accountTypeLabel">Type of Account</InputLabel>
+        <Select
           autoFocus
-          margin="dense"
-          id="first-name"
-          label="First Name"
-          type="text"
-          variant="outlined"
-        />
-        <InputField
-          autoFocus
-          margin="dense"
-          id="last-name"
-          label="Last Name"
-          type="text"
-          variant="outlined"
-        />
-        <InputField
-          autoFocus
-          margin="dense"
-          id="email"
-          label="Email Address"
-          type="email"
-          variant="outlined"
-        />
-        <InputField
-          autoFocus
-          margin="dense"
-          id="dob"
-          label=""
-          type="Date"
-          variant="outlined"
-        />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Back</Button>
-          <Button onClick={handleSubmit}>Create</Button>
-        </DialogActions>
-      </FormPopup>
-    </div>
+          labelId="accountTypeLabel"
+          id="accountType"
+          value={accountType}
+          onChange={handleAccountTypeChange}
+        >
+          <MenuItem value="headOfSchool">Head of School</MenuItem>
+          <MenuItem value="assistantHeadOfSchool">Assistant Head of School</MenuItem>
+        </Select>
+      </AccountTypeSection>
+      <InputField
+        id="firstName"
+        label="First Name"
+        type="text"
+        variant="outlined"
+        required
+      />
+      <InputField
+        id="lastName"
+        label="Last Name"
+        type="text"
+        variant="outlined"
+        required
+      />
+      <InputField
+        id="email"
+        label="Email Address"
+        type="email"
+        variant="outlined"
+        required
+      />
+      <InputField
+        id="dateOfBirth"
+        label=""
+        type="Date"
+        variant="outlined"
+        required
+      />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Back</Button>
+        <Button onClick={(event) => handleSubmit(event)}>Create</Button>
+      </DialogActions>
+    </FormPopup>
   );
 }
