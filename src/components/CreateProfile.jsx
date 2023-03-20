@@ -68,72 +68,83 @@ const InputField = styled(TextField)`
 
 export const CreateProfile = ({ open, onClose }) => {
   const [accountType, setAccountType] = useState("");
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    dateOfBirth: ""
-  });
+  const [formData, setFormData] = useState({});
 
-  const handleSubmit = (event) => {
+  const handleSubmit = () => {
     //send the data
-    setAccountType("")
-    onClose()
+    console.log(formData)
+    closeForm()
   };
 
   const handleAccountTypeChange = (event) => {
     setAccountType(event.target.value);
   };
 
+  const handleChange = (fieldName, fieldValue) => {
+    const newFormData = formData;
+    newFormData[fieldName] = fieldValue;
+    setFormData(newFormData)
+  }
+
+  const closeForm = () => {
+    setFormData({})
+    setAccountType("")
+    onClose()
+  }
+
   return (
-    <FormPopup open={open} onClose={onClose}>
+    <FormPopup open={open} onClose={closeForm}>
       <DialogTitle>Create New Profile</DialogTitle>
       <DialogContent>
-      <AccountTypeSection>
-        <InputLabel id="accountTypeLabel">Type of Account</InputLabel>
-        <Select
-          autoFocus
-          labelId="accountTypeLabel"
-          id="accountType"
-          value={accountType}
-          onChange={handleAccountTypeChange}
-        >
-          <MenuItem value="headOfSchool">Head of School</MenuItem>
-          <MenuItem value="assistantHeadOfSchool">Assistant Head of School</MenuItem>
-        </Select>
-      </AccountTypeSection>
-      <InputField
-        id="firstName"
-        label="First Name"
-        type="text"
-        variant="outlined"
-        required
-      />
-      <InputField
-        id="lastName"
-        label="Last Name"
-        type="text"
-        variant="outlined"
-        required
-      />
-      <InputField
-        id="email"
-        label="Email Address"
-        type="email"
-        variant="outlined"
-        required
-      />
-      <InputField
-        id="dateOfBirth"
-        label=""
-        type="Date"
-        variant="outlined"
-        required
-      />
+        <AccountTypeSection>
+          <InputLabel id="accountTypeLabel">Type of Account</InputLabel>
+          <Select
+            autoFocus
+            labelId="accountTypeLabel"
+            id="accountType"
+            value={accountType}
+            onChange={handleAccountTypeChange}
+          >
+            <MenuItem value="headOfSchool">Head of School</MenuItem>
+            <MenuItem value="assistantHeadOfSchool">Assistant Head of School</MenuItem>
+          </Select>
+        </AccountTypeSection>
+        <InputField
+          id="firstName"
+          label="First Name"
+          type="text"
+          variant="outlined"
+          onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
+          required
+        />
+        <InputField
+          id="lastName"
+          label="Last Name"
+          type="text"
+          variant="outlined"
+          onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
+          required
+        />
+        <InputField
+          id="email"
+          label="Email Address"
+          type="email"
+          variant="outlined"
+          onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
+          required
+        />
+        <InputField
+          id="dateOfBirth"
+          label=""
+          type="Date"
+          variant="outlined"
+          onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
+          required
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Back</Button>
-        <Button onClick={(event) => handleSubmit(event)}>Create</Button>
+        <Button onClick={closeForm}>Back</Button>
+        <Button onClick={handleSubmit}>Create</Button>
       </DialogActions>
     </FormPopup>
   );
