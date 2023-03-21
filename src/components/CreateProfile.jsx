@@ -9,39 +9,51 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  TextField
 } from '@mui/material';
+import SchoolAuthoritiesForm from './SchoolAuthoritiesForm';
 
 const FormPopup = styled(Dialog)`
 .MuiPaper-root {
   border-radius: 0px;
-  width: 1170px;
-  max-width: 2000px;
-  height: 900px;
+  height: 700px;
+  max-width: 100%;
 }
 .MuiDialogTitle-root {
   font-weight: bold;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
 }
 .MuiDialogContent-root {
-   
+  
 }
 .MuiButtonBase-root{
-  border: 1px solid rgba(13, 46, 153, 0.568);
   border-radius: 7px;
   width: 100px;
   height: 30px;
+  border: 1px solid #3576cb;
+}
+.MuiButtonBase-root:hover {
+  
 }
 .MuiFormControl-root {
-  margin: 20px 20px 0 0;
+  margin: 20px 0 0 0;
   width: 350px;
 }
+`;
+
+const BackButton = styled(Button)`
+  background-color: white;
+  color: #3576cb;
+`;
+
+const CreateButton = styled(Button) `
+  background-color: #3576cb;
+  color: white;
 `;
 
 const AccountTypeSection = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
+  margin-top: 20px;
   width: 220px;
 
   .MuiInputLabel-root {
@@ -59,37 +71,24 @@ const AccountTypeSection = styled.div`
   }
 `;
 
-const InputField = styled(TextField)`
-  margin-bottom: 10px;
-  border-radius: 5px;
-  border: none;
-  padding: 10px;
-`;
-
 export const CreateProfile = ({ open, onClose }) => {
   const [accountType, setAccountType] = useState("");
-  const [formData, setFormData] = useState({});
 
   const handleSubmit = () => {
-    //send the data
-    console.log(formData)
-    closeForm()
+    // const user = signUp()
   };
 
-  const handleAccountTypeChange = (event) => {
-    setAccountType(event.target.value);
+  const handleAccountTypeChange = (value) => {
+    setAccountType(value);
   };
-
-  const handleChange = (fieldName, fieldValue) => {
-    const newFormData = formData;
-    newFormData[fieldName] = fieldValue;
-    setFormData(newFormData)
-  }
 
   const closeForm = () => {
-    setFormData({})
     setAccountType("")
     onClose()
+  }
+
+  function renderForm () {
+    return <SchoolAuthoritiesForm handleSubmit />
   }
 
   return (
@@ -103,48 +102,17 @@ export const CreateProfile = ({ open, onClose }) => {
             labelId="accountTypeLabel"
             id="accountType"
             value={accountType}
-            onChange={handleAccountTypeChange}
+            onChange={(e) => handleAccountTypeChange(e.target.value)}
           >
             <MenuItem value="headOfSchool">Head of School</MenuItem>
             <MenuItem value="assistantHeadOfSchool">Assistant Head of School</MenuItem>
           </Select>
         </AccountTypeSection>
-        <InputField
-          id="firstName"
-          label="First Name"
-          type="text"
-          variant="outlined"
-          onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
-          required
-        />
-        <InputField
-          id="lastName"
-          label="Last Name"
-          type="text"
-          variant="outlined"
-          onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
-          required
-        />
-        <InputField
-          id="email"
-          label="Email Address"
-          type="email"
-          variant="outlined"
-          onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
-          required
-        />
-        <InputField
-          id="dateOfBirth"
-          label=""
-          type="Date"
-          variant="outlined"
-          onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
-          required
-        />
+        { renderForm() } 
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeForm}>Back</Button>
-        <Button onClick={handleSubmit}>Create</Button>
+        <BackButton onClick={closeForm}>Back</BackButton>
+        <CreateButton onClick={handleSubmit}>Create</CreateButton>
       </DialogActions>
     </FormPopup>
   );
