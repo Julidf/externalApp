@@ -9,8 +9,10 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  TextField,
+  Box,
 } from '@mui/material';
-import SchoolAuthoritiesForm from './SchoolAuthoritiesForm';
+
 
 const FormPopup = styled(Dialog)`
 .MuiPaper-root {
@@ -50,6 +52,28 @@ const CreateButton = styled(Button) `
   color: white;
 `;
 
+const FormContainer = styled(Box) `
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 15px;
+
+@media (max-width: 1850px) {
+grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 1250px) {
+grid-template-columns: repeat(1, 1fr);
+}
+
+`;
+
+const InputField = styled(TextField)`
+margin-bottom: 10px;
+border-radius: 5px;
+border: none;
+padding: 10px;
+`;
+
 const AccountTypeSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -73,23 +97,56 @@ const AccountTypeSection = styled.div`
 
 export const CreateProfile = ({ open, onClose }) => {
   const [accountType, setAccountType] = useState("");
+  const [formData, setFormData] = useState({});
 
-  const handleSubmit = () => {
-    // const user = signUp()
+  // async function signUp() {
+  //     try {
+  //         const { user } = await Auth.signUp({
+  //         username: formData.email,
+  //         password: generatePassword(),
+  //         attributes: {
+  //             given_name: formData.firstName,
+  //             family_name: formData.lastName,
+  //             birthdate: formData.dateOfBirth,
+  //             "custom:age": formData.age.toString()
+  //         },
+  //         group: accountType
+  //         })
+  //         console.log(user);
+  //     } catch (error) {
+  //         console.log('error signing up:', error);
+  //     }
+  // };
+
+  function generatePassword () {
+
   };
-
+  
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // const user = signUp()
+    console.log(formData)
+  };
+  
   const handleAccountTypeChange = (value) => {
     setAccountType(value);
   };
-
+  
   const closeForm = () => {
+    setFormData({})
     setAccountType("")
     onClose()
-  }
+  };
 
+  const handleChange = (fieldName, fieldValue) => {
+      setFormData({
+          ...formData,
+          [fieldName]: fieldValue,
+      });
+  };
+  
   function renderForm () {
-    return <SchoolAuthoritiesForm handleSubmit />
-  }
+  };
 
   return (
     <FormPopup open={open} onClose={closeForm}>
@@ -104,15 +161,49 @@ export const CreateProfile = ({ open, onClose }) => {
             value={accountType}
             onChange={(e) => handleAccountTypeChange(e.target.value)}
           >
-            <MenuItem value="headOfSchool">Head of School</MenuItem>
-            <MenuItem value="assistantHeadOfSchool">Assistant Head of School</MenuItem>
+            <MenuItem value="headOfSchool"> Head of School </MenuItem>
+            <MenuItem value="assistantHeadOfSchool"> Assistant Head of School </MenuItem>
           </Select>
         </AccountTypeSection>
-        { renderForm() } 
+        <FormContainer>
+          <InputField
+            id="firstName"
+            label="First Name"
+            type="text"
+            variant="outlined"
+            onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
+            required
+          />
+          <InputField
+            id="lastName"
+            label="Last Name"
+            type="text"
+            variant="outlined"
+            onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
+            required
+          />
+          <InputField
+            id="email"
+            label="Email Address"
+            type="email"
+            variant="outlined"
+            onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
+            required
+          />
+          <InputField
+            id="dateOfBirth"
+            label="Date of Birth"
+            type="Date"
+            variant="outlined"
+            InputLabelProps={{ shrink: true }}
+            onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
+            required
+          />
+        </FormContainer> 
       </DialogContent>
       <DialogActions>
-        <BackButton onClick={closeForm}>Back</BackButton>
-        <CreateButton onClick={handleSubmit}>Create</CreateButton>
+        <BackButton onClick={closeForm}> Back </BackButton>
+        <CreateButton onClick={(e) => handleSubmit(e)}> Create </CreateButton>
       </DialogActions>
     </FormPopup>
   );
