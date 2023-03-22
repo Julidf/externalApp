@@ -8,7 +8,7 @@ export const LandingPage = () => {
 
   return( 
   <div>
-    <Button variant="outlined" onClick={() => setCreatingProfile(true)}>
+    <Button variant="outlined" type='button' onClick={() => setCreatingProfile(true)}>
       Create New Profile
     </Button>
 

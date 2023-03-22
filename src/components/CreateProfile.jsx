@@ -9,9 +9,9 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  TextField,
   Box,
 } from '@mui/material';
+import SchoolAuthoritiesForm from './SchoolAuthoritiesForm';
 
 
 const FormPopup = styled(Dialog)`
@@ -64,14 +64,6 @@ grid-template-columns: repeat(2, 1fr);
 @media (max-width: 1250px) {
 grid-template-columns: repeat(1, 1fr);
 }
-
-`;
-
-const InputField = styled(TextField)`
-margin-bottom: 10px;
-border-radius: 5px;
-border: none;
-padding: 10px;
 `;
 
 const AccountTypeSection = styled.div`
@@ -99,6 +91,7 @@ export const CreateProfile = ({ open, onClose }) => {
   const [accountType, setAccountType] = useState("");
   const [formData, setFormData] = useState({});
 
+  //"custom:age": formData.age.toString()
   // async function signUp() {
   //     try {
   //         const { user } = await Auth.signUp({
@@ -107,8 +100,8 @@ export const CreateProfile = ({ open, onClose }) => {
   //         attributes: {
   //             given_name: formData.firstName,
   //             family_name: formData.lastName,
+  //             email: formData.email,
   //             birthdate: formData.dateOfBirth,
-  //             "custom:age": formData.age.toString()
   //         },
   //         group: accountType
   //         })
@@ -119,12 +112,12 @@ export const CreateProfile = ({ open, onClose }) => {
   // };
 
   function generatePassword () {
-
+    return formData.firstName.substr();
   };
   
   const handleSubmit = (e) => {
     e.preventDefault()
-    // const user = signUp()
+    //const user = signUp()
     console.log(formData)
   };
   
@@ -144,9 +137,6 @@ export const CreateProfile = ({ open, onClose }) => {
           [fieldName]: fieldValue,
       });
   };
-  
-  function renderForm () {
-  };
 
   return (
     <FormPopup open={open} onClose={closeForm}>
@@ -163,47 +153,17 @@ export const CreateProfile = ({ open, onClose }) => {
           >
             <MenuItem value="headOfSchool"> Head of School </MenuItem>
             <MenuItem value="assistantHeadOfSchool"> Assistant Head of School </MenuItem>
+            <MenuItem value="parent"> Parent </MenuItem>
           </Select>
         </AccountTypeSection>
         <FormContainer>
-          <InputField
-            id="firstName"
-            label="First Name"
-            type="text"
-            variant="outlined"
-            onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
-            required
-          />
-          <InputField
-            id="lastName"
-            label="Last Name"
-            type="text"
-            variant="outlined"
-            onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
-            required
-          />
-          <InputField
-            id="email"
-            label="Email Address"
-            type="email"
-            variant="outlined"
-            onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
-            required
-          />
-          <InputField
-            id="dateOfBirth"
-            label="Date of Birth"
-            type="Date"
-            variant="outlined"
-            InputLabelProps={{ shrink: true }}
-            onChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}
-            required
-          />
-        </FormContainer> 
+          {(accountType === "headOfSchool" || "assistantHeadOfSchool") && <SchoolAuthoritiesForm handleChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}/>}
+
+        </FormContainer>
       </DialogContent>
       <DialogActions>
-        <BackButton onClick={closeForm}> Back </BackButton>
-        <CreateButton onClick={(e) => handleSubmit(e)}> Create </CreateButton>
+        <BackButton type='button' onClick={closeForm}> Back </BackButton>
+        <CreateButton type='submit' onClick={(e) => handleSubmit(e)}> Create </CreateButton>
       </DialogActions>
     </FormPopup>
   );
