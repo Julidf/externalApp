@@ -91,34 +91,23 @@ export const CreateProfile = ({ open, onClose }) => {
   const [accountType, setAccountType] = useState("");
   const [formData, setFormData] = useState({});
 
-  //"custom:age": formData.age.toString()
-  // async function signUp() {
-  //     try {
-  //         const { user } = await Auth.signUp({
-  //         username: formData.email,
-  //         password: generatePassword(),
-  //         attributes: {
-  //             given_name: formData.firstName,
-  //             family_name: formData.lastName,
-  //             email: formData.email,
-  //             birthdate: formData.dateOfBirth,
-  //         },
-  //         group: accountType
-  //         })
-  //         console.log(user);
-  //     } catch (error) {
-  //         console.log('error signing up:', error);
-  //     }
-  // };
-
   function generatePassword () {
     return formData.firstName.substr();
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    //const user = signUp()
-    console.log(formData)
+
+    try {
+      const data = await adminCreateCognitoUser(formData);
+      console.log('User created successfully!');
+      console.log(data)
+      // Do something with the successful response
+    } catch (error) {
+      console.log('Error creating user:', error);
+      // Handle the error
+    }
+
   };
   
   const handleAccountTypeChange = (value) => {
@@ -157,8 +146,7 @@ export const CreateProfile = ({ open, onClose }) => {
           </Select>
         </AccountTypeSection>
         <FormContainer>
-          {(accountType === "headOfSchool" || "assistantHeadOfSchool") && <SchoolAuthoritiesForm handleChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}/>}
-
+          {(accountType === "headOfSchool") && <SchoolAuthoritiesForm handleChange={(e) => handleChange(e.target.getAttribute("id"), e.target.value)}/>}
         </FormContainer>
       </DialogContent>
       <DialogActions>
